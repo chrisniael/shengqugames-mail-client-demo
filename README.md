@@ -47,9 +47,10 @@ POST https://mail.shengqugames.com/slogin.do
 
 ##### Headers
 
-| KEY          | VALUE                   | DESCRIPTION          |
-| ------------ | ----------------------- | -------------------- |
-| Content-Type | text/html;charset=utf-8 | 响应 body 数据的类型 |
+| KEY          | VALUE                                                  | DESCRIPTION          |
+|--------------|--------------------------------------------------------|----------------------|
+| Content-Type | text/html;charset=utf-8                                | 响应 body 数据的类型 |
+| Set-Cookie   | JSESSIONIDSSO=55443DB07FE0196136EA2ED483BA1846; Path=/ | cookie 值            |
 
 ##### Body
 
@@ -106,6 +107,8 @@ username=shenyu.tommy%40shengqugames.com&pwd=****&dyn=ccewqw&password=****ccewqw
 ```http
 HTTP/1.1 302 Moved Temporarily
 Content-Type: text/html;charset=utf-8
+Set-Cookie: JSESSIONID=28BE6CD816C3A191739F506786B96C4E; Path=/
+Set-Cookie: JSESSIONIDSSO=55443DB07FE0196136EA2ED483BA1846; Path=/
 Location: https://mail.shengqugames.com/mail/mail.do;jsessionid=E3DF33F6C8200E0E917CE4B3C92D4188?locale=zh_CN?customizedTheme=
 ```
 
@@ -132,7 +135,72 @@ Content-Type: text/html;charset=utf-8
 
 ## 新邮件通知
 
+### Request
 
+```http
+GET https://mail.shengqugames.com/mail/message_notice_json.do
+```
+
+#### Params
+
+| KEY  | DESCRIPTION       |
+|------|-------------------|
+| \_dc | 随机数字 ∈ (0，1) |
+
+#### Headers
+
+| KEY    | DESCRIPTION              |
+|--------|--------------------------|
+| Cookie | 登录接口返回的 cookie 值 |
+
+#### Body
+
+空
+
+### Response
+
+##### Status
+
+| VALUE | MESSAGE |
+|-------|---------|
+| 200   | OK      |
+
+##### Headers
+
+| KEY          | VALUE                   | DESCRIPTION                       |
+|--------------|-------------------------|-----------------------------------|
+| Content-Type | text/json;charset=utf-8 | 响应 body 数据的类型, 这里是 json |
+
+##### Body
+
+```json
+{
+  "count" : 0
+}
+```
+
+| field | VALUE          |
+|-------|----------------|
+| count | 收到邮件的数量 |
+
+### Example
+
+#### 请求
+
+```http
+GET /mail/message_notice_json.do?_dc=1557413881245 HTTP/1.1
+Host: mail.shengqugames.com
+Cookie: JSESSIONID=A0F745549BDFDC3DEB45D4352D3B50ED; JSESSIONID=28BE6CD816C3A191739F506786B96C4E; JSESSIONIDSSO=55443DB07FE0196136EA2ED483BA1846
+```
+
+#### 响应
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/json;charset=utf-8
+
+{'count':0}
+```
 
 ## 获取未读邮件列表
 
@@ -142,8 +210,4 @@ Content-Type: text/html;charset=utf-8
 
 
 
-## 获取某封邮件具体内容那个
-
-
-
-#### 
+## 获取某封邮件具体内容
